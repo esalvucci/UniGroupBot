@@ -19,7 +19,9 @@ def handle(message):
 #			TODO			#
 #	if command == '/help':
 # 		bot.sendMessage(chat_id,messaggio)
-	if command == '/random':
+	if command == '/start':
+ 		bot.sendMessage(chat_id, 'Esegui il comando /random per richiedere una frase di Vignola a caso')
+	elif command == '/random':
  		bot.sendMessage(chat_id, random.choice(foo))
 
 bot = telepot.Bot(vignolaBotToken.token)
