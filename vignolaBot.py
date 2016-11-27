@@ -11,8 +11,9 @@ def handle(message):
 	command = message['text']
 	import random
 
-	foo = ['E\' bugggggia', 'uagliooo!', 'stasera devo programmare...', 'st\'Arduino!', 'Uaglio so arrivat ', 'eeeeeeeee credo di si...no buggia, \'sto weekend sto con Azzurra', 'e\' grandeTanto!', 'Serve alloro, origano e cipoDDa!']
-	print(random.choice(foo))	
+	foo = ['E\' bugggggia', 'uagliooo!', 'stasera devo programmare...', 'st\'Arduino!', 'Uaglio so arrivat ', 'eeeeeeeee credo di si...no buggia, \'sto weekend sto con Azzurra', 'Tonno e cipodda per fa lu soffrittu..capi\'?']
+	
+print(random.choice(foo))	
 
 	print 'Ho ricevuto il comando %s' % command
 
