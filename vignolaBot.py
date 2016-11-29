@@ -12,10 +12,7 @@ def handle(message):
     command = message['text']
     import random
 
-    foo = ['E\' bugggggia', 'uagliooo!', 'stasera devo programmare...', 'st\'Arduino!', 'Uaglio so arrivat ',
-           'eeeeeeeee credo di si...no buggia, \'sto weekend sto con Azzurra',
-           'Tonno e cipodda per fa lu soffrittu..capi\'?']
-
+    foo = ['E\' bugggggia', 'uagliooo!', 'stasera devo programmare...', 'st\'Arduino!', 'Uaglio so arrivat ', 'eeeeeeeee credo di si...no buggia, \'sto weekend sto con Azzurra', 'Tonno e cipodda per fa lu soffrittu..capi\'?', 'Non posso venire devo fare la valigia', 'Non posso devo pulire casa']
     print(random.choice(foo))
 
     print('Ho ricevuto il comando %s' % command)
@@ -32,3 +29,6 @@ bot = telepot.Bot(vignolaBotToken.token)
 bot.message_loop(handle)
 
 print('In attesa di nuovi messaggi...')
+
+while 1:
+    time.sleep(100)
