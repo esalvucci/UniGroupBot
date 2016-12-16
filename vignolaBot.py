@@ -1,34 +1,47 @@
-import telepot
 import sys
-import time
+import telepot
+from telepot.delegate import per_inline_from_id, create_open, pave_event_space
 import random
-import datetime
 import vignolaBotToken
 
+foo = ['E\' bugggggia', 'uagliooo!', 'stasera devo programmare...', 'st\'Arduino!', 'Uaglio so arrivat ',
+           'eeeeeeeee credo di si...no buggia, \'sto weekend sto con Azzurra',
+           'Tonno e cipodda per fa lu soffrittu..capi\'?', 'Non posso venire devo fare la valigia',
+           'Non posso devo pulire casa', 'aaaaaaaaaaaa ok']
 
-# funzione che viene eseguita ad ogni messaggio ricevuto
-def handle(message):
-    chat_id = message['chat']['id']
-    command = message['text']
-    import random
 
-    foo = ['E\' bugggggia', 'uagliooo!', 'stasera devo programmare...', 'st\'Arduino!', 'Uaglio so arrivat ', 'eeeeeeeee credo di si...no buggia, \'sto weekend sto con Azzurra', 'Tonno e cipodda per fa lu soffrittu..capi\'?', 'Non posso venire devo fare la valigia', 'Non posso devo pulire casa', 'aaaaaaaaaaaa ok']
-    print(random.choice(foo))
+class InlineHandler(telepot.helper.InlineUserHandler, telepot.helper.AnswererMixin):
+    def __init__(self, *args, **kwargs):
+        super(InlineHandler, self).__init__(*args, **kwargs)
 
-    print('Ho ricevuto il comando %s' % command)
+    def get_definition(self):
+        return random.choice(foo)
 
-    # TODO
-    # if command == '/help':
-    # bot.sendMessage(chat_id, messaggio)
-    if command == '/start':
-        bot.sendMessage(chat_id, 'Esegui il comando /random per richiedere una frase di Vignola a caso')
-    elif command == '/random':
-        bot.sendMessage(chat_id, random.choice(foo))
+    def on_inline_query(self, msg):
+        def compute_answer():
+            query_id, from_id, query_string = telepot.glance(msg, flavor='inline_query')
+            if query_string == "random":
+                print(self.id, ':', 'Inline Query:', query_id, from_id, query_string)
+                articles = [{'type': 'article',
+                             'id': 'abc', 'title': query_string, 'message_text': self.get_definition()}]
+            else:
+                articles = [{'type': 'article',
+                             'id': 'abc', 'title': 'error', 'message_text': 'Uaglio non ti capisco'}]
+            return articles
 
-bot = telepot.Bot(vignolaBotToken.token)
-bot.message_loop(handle)
+        self.answerer.answer(msg, compute_answer)
 
-print('In attesa di nuovi messaggi...')
+    def on_chosen_inline_result(self, msg):
+        from pprint import pprint
+        pprint(msg)
+        result_id, from_id, query_string = telepot.glance(msg, flavor='chosen_inline_result')
+        print(self.id, ':', 'Chosen Inline Result:', result_id, from_id, query_string)
 
-while 1:
-    time.sleep(100)
+
+TOKEN = vignolaBotToken.token
+
+bot = telepot.DelegatorBot(TOKEN, [
+    pave_event_space()(
+        per_inline_from_id(), create_open, InlineHandler, timeout=10),
+])
+bot.message_loop(run_forever='Listening ...')
